@@ -1,0 +1,7 @@
+C:\Users\Lexicon\source\repos\Exercise 1\Exercise 1\bin\Debug\Exercise 1.exe.config
+C:\Users\Lexicon\source\repos\Exercise 1\Exercise 1\bin\Debug\Exercise 1.exe
+C:\Users\Lexicon\source\repos\Exercise 1\Exercise 1\bin\Debug\Exercise 1.pdb
+C:\Users\Lexicon\source\repos\Exercise 1\Exercise 1\obj\Debug\Exercise 1.csprojResolveAssemblyReference.cache
+C:\Users\Lexicon\source\repos\Exercise 1\Exercise 1\obj\Debug\Exercise 1.csproj.CoreCompileInputs.cache
+C:\Users\Lexicon\source\repos\Exercise 1\Exercise 1\obj\Debug\Exercise 1.exe
+C:\Users\Lexicon\source\repos\Exercise 1\Exercise 1\obj\Debug\Exercise 1.pdb
