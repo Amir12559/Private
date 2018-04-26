@@ -1,0 +1,237 @@
+Golf 
+Your assignment is to make a golf game.
+In the application, the user controls a golf player trying to get a golf ball to the cup at the end of a course. You do this by selecting the angle of the ball’s trajectory, and the force you put behind the swing. The game ends when the ball is in the cup.
+Required Features:
+
+• The player should be able to launch the golf ball from its initial location, with a given angle (degrees from the ground up) and velocity (m/s at the start of the ball’s arc).
+        ○ The angle and velocity should determine how far the ball travels, reducing the distance between the starting location and the cup.
+        ○ Each swing should move the starting location for each arc.
+        ○ Gravity should affect the ball while it travels, which should be used to determine the arc of the ball.
+• The progress the player makes should be displayed between swings, showing the amount of swings the player has taken, as well as the distance to the cup.
+        ○ If the ball travels beyond the cup, the new distance should still be positive.
+• When the ball has reached the goal, the game should end, displaying all swings taken, and how far the ball travelled each time.
+• If the ball moves too far away from the cup, the game should generate an exception that takes you out of the game loop, with a failure message.
+• If too many swings have been taken, the game should end, with a different failure message.
+
+Resources:
+
+• https://app.pluralsight.com/library/courses/linq-fundamentals-csharp-6/table-of-contents
+• Algorithms:
+        ○ Angle In Radians: (Math.PI / 180) * angle
+        ○ Distance: Math.Pow(velocity, 2) / GRAVITY * Math.Sin(2 * angleInRadians)
+• Gravity is equal to 9.8
+• Example: At 45 Degrees and 56 m/s, the ball should travel 320 meters.
+Expected Duration:
+Subjects Covered:
+
+•	Collections
+
+
+Program.cs
+
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Golf_An
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("This is my Golf World");
+            Console.Read();
+
+            Course course = new Course();
+            Swing game = new Swing();
+            game.DoSwing(course);
+            game.play();
+
+            if(game.Goal) {
+                Console.WriteLine("Game finished , won other!");
+                game.ShowLog();
+            }
+
+            Console.ReadKey();
+        
+        }
+    }
+}
+
+
+
+
+
+Swing.cs
+
+
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Golf_An
+{
+    class Swing
+    {
+        public Course player;
+        public const float GRAVITY = 9.8f;
+        public const int Total_SWINGS = 15;
+        public const double COURSE_length = 5000;
+        public const double Far_Distance = 7000;
+
+        public void play()
+        {
+            
+            DoSwing(player);
+            Hit();
+        }
+
+        public List<string> logMessages;
+        public double angle;
+        public double velocity;
+
+        public void ShowLog()
+        {
+            throw new NotImplementedException();
+        }
+
+        
+        public bool GameEnded;
+
+        public bool Goal { get; set; }
+        public double MAX_DISTANCE_AWAY1 { get => COURSE_length; set => MAX_DISTANCE_AWAY1 = value; }
+
+        public void DoSwing(Course player)
+        {
+            this.player = player;
+            logMessages = new List<string>();
+            Goal = false;
+        }
+
+        public void Hit()
+        {
+            Console.Clear();
+            bool goal = false;
+            double distanceLeft = COURSE_length;
+            string input;
+
+            Console.WriteLine($"Distnace of cup: {distanceLeft}m");
+            Console.ReadLine();
+
+            while (!goal)
+            {
+                Console.Write(" Write Angel of swing? ");
+                input = Console.ReadLine();
+                angle = double.Parse(input);
+
+                Console.Write("Force of the Swing? velocity? ");
+                input = Console.ReadLine();
+                velocity = double.Parse(input);
+
+                player.Swings++;
+
+                double angleInRadians = (Math.PI / 180) * angle;
+
+                double distance = Math.Pow(velocity, 2) / 9.8 * Math.Sin(2 * angleInRadians);
+                distanceLeft -= distance;
+                distanceLeft = Math.Abs(distanceLeft);
+                try
+                {
+                    int Total_SWINGS = 0;
+                    int Max_SWINGS = 20;
+                    if (player.Swings >= Max_SWINGS)
+                    {
+                        throw new Exception("Too many swings.");
+                    }
+
+                    if (distanceLeft > MAX_DISTANCE_AWAY1)
+                    {
+                        Console.WriteLine($"The golfball flew {distance}m!");
+                        throw new Exception("Too much away");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message + " : " + ex.GetType());
+                    break;
+                }
+
+                LogSwings(distance, player.Swings);
+
+                if (distanceLeft <= 0)
+                {
+                    GameEnded = true;
+                }
+
+                Console.WriteLine($"Traveldistance: {distance}m");
+                Console.WriteLine($"Distance left: {distanceLeft}m");
+                Console.WriteLine($"Swings: {player.Swings}");
+                Console.WriteLine();
+
+
+            }
+        }
+
+        public void LogSwings(double distance, int swings)
+        {
+            string message = String.Format(format: $"Swing {GameEnded}, traveled distance: {distance} m.");
+            logMessages.Add(message);
+        }
+        public void Showlog()
+        {
+            if (logMessages.Count == 0)
+            {
+                Console.WriteLine();
+                Console.WriteLine("Nothing has been recorded yet.");
+            }
+            else
+            {
+                Console.WriteLine();
+                foreach (string log in logMessages)
+                {
+                    Console.WriteLine(log);
+
+                }
+
+            }
+
+        }
+    }
+}
+
+
+
+
+Course.cs
+
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Golf_An
+{
+    class Course
+    {
+        public int Swings { get; set; }
+    }
+}
+
+
+
+
+
+
+
+
+
+
